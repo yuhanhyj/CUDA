@@ -64,5 +64,52 @@ int main(int argc, char **argv)
     }
     printf("size(%u, %u)\n\n", n, m);
 
+    float *matrix_a = malloc(n * m * sizeof(*matrix_a));
+    if (matrix_a == NULL)
+    {
+        fprintf(stderr, "Failed to allocate matrix_a\n");
+        exit(EXIT_FAILURE);
+    }
+
+    for (int i = 0; i < n; ++i)
+    {
+        matrix_a[i * m] = 0.98 * (float)((i + 1) * (i + 1)) / (float)(n * n);
+        for (int j = 1; j < m; ++j)
+        {
+            matrix_a[i * m + j] = matrix_a[i * m] * ((m - j) * (m - j) / (m * m));
+        }
+    }
+
+    float *matrix_cpu = malloc(n * m * sizeof(*matrix_cpu));
+    if (matrix_cpu == NULL)
+    {
+        fprintf(stderr, "Failed to allocate matrix_cpu\n");
+        exit(EXIT_FAILURE);
+    }
+    memcpy(matrix_cpu, matrix_a, n * m * sizeof(*matrix_a));
+
+    float *matrix_cuda = malloc(n * m * sizeof(*matrix_cuda));
+    if (matrix_cuda == NULL)
+    {
+        fprintf(stderr, "Failed to allocate matrix_cuda on cpu\n");
+        exit(EXIT_FAILURE);
+    }
+    memcpy(matrix_cuda, matrix_a, n * m * sizeof(*matrix_a));
+
+    // TODO: Implement C and CUDA code here
+
+    //
+    if (matrix_a == NULL)
+    {
+        free(matrix_a);
+    }
+    if (matrix_cpu == NULL)
+    {
+        free(matrix_cpu);
+    }
+    if (matrix_cuda == NULL)
+    {
+        free(matrix_cuda);
+    }
     return 0;
 }
