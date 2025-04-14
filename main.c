@@ -5,6 +5,9 @@
 #include <string.h>
 #include <time.h>
 
+#include "precision.h"
+#include "radiator.h"
+
 int main(int argc, char **argv)
 {
     uint32_t n = 30;
@@ -13,6 +16,8 @@ int main(int argc, char **argv)
     uint8_t average = 0;
     uint8_t print_time = 0;
     uint8_t skip_cpu = 0;
+    float cpu_times[2] = {0};
+
     for (int i = 1; i < argc; ++i)
     {
         char *arg = argv[i];
@@ -64,7 +69,7 @@ int main(int argc, char **argv)
     }
     printf("size(%u, %u)\n\n", n, m);
 
-    float *matrix_a = malloc(n * m * sizeof(*matrix_a));
+    FLOAT *matrix_a = malloc(n * m * sizeof(*matrix_a));
     if (matrix_a == NULL)
     {
         fprintf(stderr, "Failed to allocate matrix_a\n");
@@ -73,14 +78,14 @@ int main(int argc, char **argv)
 
     for (int i = 0; i < n; ++i)
     {
-        matrix_a[i * m] = 0.98 * (float)((i + 1) * (i + 1)) / (float)(n * n);
+        matrix_a[i * m] = 0.98 * (FLOAT)((i + 1) * (i + 1)) / (FLOAT)(n * n);
         for (int j = 1; j < m; ++j)
         {
             matrix_a[i * m + j] = matrix_a[i * m] * ((m - j) * (m - j) / (m * m));
         }
     }
 
-    float *matrix_cpu = malloc(n * m * sizeof(*matrix_cpu));
+    FLOAT *matrix_cpu = malloc(n * m * sizeof(*matrix_cpu));
     if (matrix_cpu == NULL)
     {
         fprintf(stderr, "Failed to allocate matrix_cpu\n");
@@ -88,7 +93,7 @@ int main(int argc, char **argv)
     }
     memcpy(matrix_cpu, matrix_a, n * m * sizeof(*matrix_a));
 
-    float *matrix_cuda = malloc(n * m * sizeof(*matrix_cuda));
+    FLOAT *matrix_cuda = malloc(n * m * sizeof(*matrix_cuda));
     if (matrix_cuda == NULL)
     {
         fprintf(stderr, "Failed to allocate matrix_cuda on cpu\n");
@@ -97,19 +102,24 @@ int main(int argc, char **argv)
     memcpy(matrix_cuda, matrix_a, n * m * sizeof(*matrix_a));
 
     // TODO: Implement C and CUDA code here
-
+    FLOAT *averages = malloc(n * sizeof(*averages));
+    cpu_propagate_heat(matrix_a, matrix_cpu, n, m, iterations, cpu_times, averages, average);
     //
-    if (matrix_a == NULL)
+    if (matrix_a != NULL)
     {
         free(matrix_a);
     }
-    if (matrix_cpu == NULL)
+    if (matrix_cpu != NULL)
     {
         free(matrix_cpu);
     }
-    if (matrix_cuda == NULL)
+    if (matrix_cuda != NULL)
     {
         free(matrix_cuda);
+    }
+    if (averages != NULL)
+    {
+        free(averages);
     }
     return 0;
 }
