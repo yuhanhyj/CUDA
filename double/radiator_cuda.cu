@@ -15,17 +15,17 @@
 // Device-side function to compute one cell update
 __device__ __forceinline__ FLOAT row_iteration_cuda(FLOAT *matrix_old, int i, int j, int m)
 {
-  FLOAT res = 1.6f * matrix_old[i * m + (j - 2 + m) % m] + 
-              1.55f * matrix_old[i * m + (j - 1 + m) % m] + 
+  FLOAT res = 1.6 * matrix_old[i * m + (j - 2 + m) % m] + 
+              1.55 * matrix_old[i * m + (j - 1 + m) % m] + 
               matrix_old[i * m + j % m] + 
-              0.6f * matrix_old[i * m + (j + 1) % m] + 
-              0.25f * matrix_old[i * m + (j + 2) % m];
-  return res * 0.2f;
+              0.6 * matrix_old[i * m + (j + 1) % m] + 
+              0.25 * matrix_old[i * m + (j + 2) % m];
+  return res * 0.2;
 }
 
 #ifndef SHARED_MEM
 // Global-memory kernel
-__global__ void propagate_row_heat_per_block(FLOAT *matrix_a, FLOAT *matrix_b,int n, int m, int iterations)
+__global__ void propagate_row_heat_per_block(FLOAT *matrix_a, FLOAT *matrix_b, int n, int m, int iterations)
 {
   int i = blockIdx.y * blockDim.y + threadIdx.y;
   if (i >= n) return;
@@ -90,7 +90,7 @@ __global__ void average_row_heat(FLOAT *matrix, int n, int m, FLOAT *out)
   if (y >= n) return;
   
   extern __shared__ FLOAT row_sum[];
-  row_sum[threadIdx.y] = 0.0f;
+  row_sum[threadIdx.y] = 0.0;
   __syncthreads();
   
   for (int x = threadIdx.x + 1; x < m - 1; x += blockDim.x)
