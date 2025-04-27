@@ -9,8 +9,8 @@
 extern void cuda_propagate_heat(FLOAT *matrix, int n, int m, int iterations, float *timings, FLOAT *averages, uint8_t average);
 int main(int argc, char **argv)
 {
-    uint32_t n = 30;
-    uint32_t m = 30;
+    uint32_t n = 32;
+    uint32_t m = 32;
     uint32_t iterations = 10;
     uint8_t average = 0;
     uint8_t print_time = 0;
