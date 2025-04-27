@@ -85,7 +85,7 @@ int main(int argc, char **argv)
         for (int j = 1; j < m; ++j)
         {
             matrix_a[i * m + j] =
-                matrix_a[i * m] * ((m - j) * (m - j) / (m * m));
+                   matrix_a[i * m] * ( (float)(m - j) * (m - j) / (float)(m * m) );
         }
     }
     FLOAT *matrix_cpu = NULL;
