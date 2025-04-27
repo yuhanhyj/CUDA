@@ -7,7 +7,13 @@
 /**
  * Propagates heat through a matrix using the CPU
  * 
- * @param matrix_a First buffer for computation (contains initial values)
+ * This implementation uses:
+ * - Row-oriented processing for better cache efficiency
+ * - Ghost columns to eliminate expensive modulo operations
+ * - Pair-processing of iterations where possible
+ * - Optimized memory access patterns
+ * 
+ * @param matrix_a First buffer for computation (contains initial values and will be updated)
  * @param matrix_b Second buffer for computation (will contain final result)
  * @param n Number of rows in the matrix
  * @param m Number of columns in the matrix
