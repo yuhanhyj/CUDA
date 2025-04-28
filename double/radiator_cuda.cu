@@ -5,7 +5,7 @@
 #include "cuda_debug.h"
 #include "radiator_cuda.h"
 
-#define BLOCK_SIZE_X 1024
+#define BLOCK_SIZE_X 256
 #define BLOCK_SIZE_Y 1
 #define BLOCK_SIZE_X_AVG 64
 #define BLOCK_SIZE_Y_AVG 1
@@ -106,6 +106,11 @@ __global__ void average_row_heat(FLOAT *matrix, int n, int m, FLOAT *out)
 // C linkage for host code
 extern "C" void cuda_propagate_heat(FLOAT *matrix, int n,int m,int iterations,float *timings,FLOAT *averages, uint8_t average)
 {
+
+  if (m % BLOCK_SIZE_X != 0 || n % BLOCK_SIZE_Y != 0) {
+    fprintf(stderr, "Error: block size must divide matrix dimensions\n");
+    exit(EXIT_FAILURE);
+  }
   FLOAT *devA = nullptr, *devB = nullptr, *devAvg = nullptr;
   cudaEvent_t start, finish;
   cudaEventCreate(&start);
