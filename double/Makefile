@@ -5,9 +5,8 @@ NVCC=           nvcc
 LINK=           nvcc
 DEL_FILE=       rm -f
 
-# Compiler flags with double precision
-CFLAGS          = -O2 -w -DDOUBLE_PRECISION
-NVCCFLAGS       = -O2 -arch=sm_60 -w -DDOUBLE_PRECISION
+CFLAGS          = -O3 -w -DDOUBLE_PRECISION
+NVCCFLAGS       = -O3 -arch=sm_60 -w -DDOUBLE_PRECISION
 
 INCPATH         = .
 

@@ -5,8 +5,8 @@ NVCC=           nvcc
 LINK=           nvcc
 DEL_FILE=       rm -f
 
-CFLAGS          = -O2 -w
-NVCCFLAGS       = -O2 -arch=sm_60 -w
+CFLAGS          = -O3 -w
+NVCCFLAGS       = -O3 -arch=sm_60 -w
 
 INCPATH         = .
 
@@ -15,8 +15,7 @@ OBJECTS		= radiator_cuda.o \
 			main.o
 
 TARGET		= radiator_cuda
-
-
+  
 all: radiator_cuda
 
 radiator_cuda: main.o radiator_cuda.o radiator.o
